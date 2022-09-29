@@ -49,10 +49,10 @@ std::chrono::milliseconds kTickPeriod{10};
 
 void loop()
 {
-  fl_wheel_speed = random(max(0.0, fl_wheel_speed - 0.1) * 1000, min(90.0, fl_wheel_speed + 0.1) * 1000) / 1000;
-  fr_wheel_speed = random(max(0.0, fl_wheel_speed - 0.1) * 1000, min(90.0, fl_wheel_speed + 0.1) * 1000) / 1000;
-  bl_wheel_speed = random(max(0.0, fl_wheel_speed - 0.1) * 1000, min(90.0, fl_wheel_speed + 0.1) * 1000) / 1000;
-  br_wheel_speed = random(max(0.0, fl_wheel_speed - 0.1) * 1000, min(90.0, fl_wheel_speed + 0.1) * 1000) / 1000;
+  fl_wheel_speed = random(max(0.0, fl_wheel_speed - 0.1) * 1000, min(90.0, fl_wheel_speed + 0.1) * 1000) / 1000.0f;
+  fr_wheel_speed = random(max(0.0, fl_wheel_speed - 0.1) * 1000, min(90.0, fl_wheel_speed + 0.1) * 1000) / 1000.0f;
+  bl_wheel_speed = random(max(0.0, fl_wheel_speed - 0.1) * 1000, min(90.0, fl_wheel_speed + 0.1) * 1000) / 1000.0f;
+  br_wheel_speed = random(max(0.0, fl_wheel_speed - 0.1) * 1000, min(90.0, fl_wheel_speed + 0.1) * 1000) / 1000.0f;
 
   fl_brake_temperature = 90;
   fr_brake_temperature = 90;
