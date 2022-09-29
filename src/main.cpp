@@ -37,6 +37,8 @@ CANSignal<uint16_t, 16, 16, CANTemplateConvertFloat(1), CANTemplateConvertFloat(
 CANTXMessage<2> brake_pressure_msg{can_bus, 0x410, 4, std::chrono::milliseconds{100}, front_brake_pressure, rear_brake_pressure};
 #endif
 
+constexpr uint8_t potentiometer_pin{34};
+
 void setup()
 {
   can_bus.Initialize(ICAN::BaudRate::kBaud1M);
@@ -47,6 +49,18 @@ std::chrono::milliseconds kTickPeriod{10};
 
 void loop()
 {
+  fl_wheel_speed = random(max(0.0, fl_wheel_speed - 0.1) * 1000, min(90.0, fl_wheel_speed + 0.1) * 1000) / 1000;
+  fr_wheel_speed = random(max(0.0, fl_wheel_speed - 0.1) * 1000, min(90.0, fl_wheel_speed + 0.1) * 1000) / 1000;
+  bl_wheel_speed = random(max(0.0, fl_wheel_speed - 0.1) * 1000, min(90.0, fl_wheel_speed + 0.1) * 1000) / 1000;
+  br_wheel_speed = random(max(0.0, fl_wheel_speed - 0.1) * 1000, min(90.0, fl_wheel_speed + 0.1) * 1000) / 1000;
+
+  fl_brake_temperature = 90;
+  fr_brake_temperature = 90;
+  bl_brake_temperature = 90;
+  br_brake_temperature = 90;
+
+  front_brake_pressure = map(analogRead(potentiometer_pin), 0, 4096, 0, 10000);
+  rear_brake_pressure = map(analogRead(potentiometer_pin), 0, 4096, 0, 10000);
   while (std::chrono::milliseconds(millis()) < next_tick_time)
   {
   }
