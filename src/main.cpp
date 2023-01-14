@@ -18,15 +18,15 @@ constexpr uint8_t potentiometer_pin{34};
 VirtualTimerGroup timer_group;
 
 #ifdef WHEELS
-CANSignal<float, 0, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(0), false, ICANSignal::ByteOrder::kBigEndian> fl_wheel_speed;
-CANSignal<float, 0, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(0), false, ICANSignal::ByteOrder::kBigEndian> fr_wheel_speed;
-CANSignal<float, 0, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(0), false, ICANSignal::ByteOrder::kBigEndian> bl_wheel_speed;
-CANSignal<float, 0, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(0), false, ICANSignal::ByteOrder::kBigEndian> br_wheel_speed;
+CANSignal<float, 0, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(0), false> fl_wheel_speed;
+CANSignal<float, 0, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(0), false> fr_wheel_speed;
+CANSignal<float, 0, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(0), false> bl_wheel_speed;
+CANSignal<float, 0, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(0), false> br_wheel_speed;
 
-CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40), false, ICANSignal::ByteOrder::kBigEndian> fl_brake_temperature;
-CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40), false, ICANSignal::ByteOrder::kBigEndian> fr_brake_temperature;
-CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40), false, ICANSignal::ByteOrder::kBigEndian> bl_brake_temperature;
-CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40), false, ICANSignal::ByteOrder::kBigEndian> br_brake_temperature;
+CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40), false> fl_brake_temperature;
+CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40), false> fr_brake_temperature;
+CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40), false> bl_brake_temperature;
+CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40), false> br_brake_temperature;
 
 CANTXMessage<2> fl_wheel_msg{can_bus, 0x400, 6, 100, timer_group, fl_wheel_speed, fl_brake_temperature};
 CANTXMessage<2> fr_wheel_msg{can_bus, 0x401, 6, 100, timer_group, fr_wheel_speed, fr_brake_temperature};
@@ -56,11 +56,11 @@ void randWrite()
   // front_brake_pressure = map(analogRead(potentiometer_pin), 0, 4096, 0, 10000);
   // rear_brake_pressure = map(analogRead(potentiometer_pin), 0, 4096, 0, 10000);
 
-  // Serial.print("Sent fl_wheel_speed: ");
-  // Serial.print(fl_wheel_speed);
-  // Serial.print("\n");
-  // Serial.print("Sent fl_brake_temperature: ");
-  // Serial.print(fl_brake_temperature);
+  Serial.print("Sent fl_wheel_speed: ");
+  Serial.print(fl_wheel_speed);
+  Serial.print("\n");
+  Serial.print("Sent fl_brake_temperature: ");
+  Serial.print(fl_brake_temperature);
   // Serial.print("\n");
   // Serial.print("Sent front_brake_pressure: ");
   // Serial.print(front_brake_pressure);
@@ -71,8 +71,8 @@ void randWrite()
 
 void setup()
 {
-  // Serial.begin(9600);
-  // Serial.println("Started");
+  Serial.begin(9600);
+  Serial.println("Started");
   can_bus.Initialize(ICAN::BaudRate::kBaud1M);
   timer_group.AddTimer(1000, randWrite);
 }
