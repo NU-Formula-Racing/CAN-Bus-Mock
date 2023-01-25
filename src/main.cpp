@@ -69,12 +69,22 @@ void randWrite()
   can_bus.Tick();
 }
 
+void enable(){
+  fl_wheel_msg.Enable();
+  fr_wheel_msg.Enable();
+}
+
 void setup()
 {
   Serial.begin(9600);
   Serial.println("Started");
   can_bus.Initialize(ICAN::BaudRate::kBaud1M);
-  timer_group.AddTimer(1000, randWrite);
+  fl_wheel_msg.Disable();
+  fr_wheel_msg.Disable();
+  bl_wheel_msg.Disable();
+  br_wheel_msg.Disable();
+  timer_group.AddTimer(100, randWrite);
+  timer_group.AddTimer(1000, enable);
 }
 
 void loop()
