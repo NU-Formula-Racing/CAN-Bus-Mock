@@ -27,10 +27,10 @@ CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-
 CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40)> bl_brake_temperature;
 CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40)> br_brake_temperature;
 
-CANRXMessage<2> fl_wheel_msg{can_bus, 0x400, fl_wheel_speed, fl_brake_temperature};
-CANRXMessage<2> fr_wheel_msg{can_bus, 0x401, fr_wheel_speed, fr_brake_temperature};
-CANRXMessage<2> bl_wheel_msg{can_bus, 0x402, bl_wheel_speed, bl_brake_temperature};
-CANRXMessage<2> br_wheel_msg{can_bus, 0x403, br_wheel_speed, br_brake_temperature};
+CANRXMessage<2> fl_wheel_msg{can_bus, 0x400, test_callback, fl_wheel_speed, fl_brake_temperature};
+CANRXMessage<2> fr_wheel_msg{can_bus, 0x401, test_callback, fr_wheel_speed, fr_brake_temperature};
+CANRXMessage<2> bl_wheel_msg{can_bus, 0x402, test_callback_never_receive, bl_brake_temperature};
+CANRXMessage<2> br_wheel_msg{can_bus, 0x403, test_callback_never_receive, br_brake_temperature};
 #endif
 
 #ifdef BRAKE_PRESSURE
@@ -40,13 +40,20 @@ CANRXMessage<1> front_brake_pressure_msg{can_bus, 0x410, front_brake_pressure};
 CANRXMessage<1> back_brake_pressure_msg{can_bus, 0x411, rear_brake_pressure};
 #endif
 
+void test_callback(){
+  Serial.print("Called back!");
+  print();
+}
+
+void test_callback_never_receive(){
+  Serial.print("I should never be printed!");
+}
+
 void print()
 {
-  can_bus.Tick();
-  float test_float = fl_wheel_speed;
   // rx on teensy
   Serial.print("Received fl_wheel_speed: ");
-  Serial.print(float(test_float));
+  Serial.print(float(fl_wheel_speed));
   Serial.print("\n");
   Serial.print("Received fr_wheel_speed: ");
   Serial.print(float(fr_wheel_speed));
@@ -77,7 +84,7 @@ void setup()
   Serial.begin(9600);
   Serial.println("Started");
   can_bus.Initialize(ICAN::BaudRate::kBaud1M);
-  timer_group.AddTimer(1000, print);
+  // timer_group.AddTimer(1000, print);
 }
 
 void loop()
