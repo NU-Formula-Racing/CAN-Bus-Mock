@@ -40,6 +40,8 @@ CANRXMessage<1> front_brake_pressure_msg{can_bus, 0x410, front_brake_pressure};
 CANRXMessage<1> back_brake_pressure_msg{can_bus, 0x411, rear_brake_pressure};
 #endif
 
+uint32_t last_receive_time;
+
 void print()
 {
   // rx on teensy
@@ -67,29 +69,44 @@ void print()
   Serial.print("Received br_brake_temperature: ");
   Serial.print(float(br_brake_temperature));
   Serial.print("\n");
-  delay(10);
 }
-
 void test_callback(){
   Serial.print("Called back!");
-  print();
+  last_receive_time = millis();
 }
 
 void test_callback_never_receive(){
   Serial.print("I should never be printed!");
 }
-
 CANRXMessage<2> fl_wheel_msg{can_bus, 0x400, test_callback, fl_wheel_speed, fl_brake_temperature};
 CANRXMessage<2> fr_wheel_msg{can_bus, 0x401, test_callback, fr_wheel_speed, fr_brake_temperature};
 CANRXMessage<2> bl_wheel_msg{can_bus, 0x402, test_callback_never_receive, bl_wheel_speed, bl_brake_temperature};
 CANRXMessage<2> br_wheel_msg{can_bus, 0x403, test_callback_never_receive, bl_wheel_speed, br_brake_temperature};
+
+void print_time(){
+  Serial.print("Last receive time: ");
+  Serial.print(fl_wheel_msg.GetLastReceiveTime());
+  Serial.print("\n");
+
+  Serial.print("Current time: ");
+  Serial.print(millis());
+  Serial.print("\n");
+
+  Serial.print("Difference: ");
+  Serial.print(millis() - last_receive_time);
+  Serial.print("\n");
+
+  Serial.print("Calculated: ");
+  Serial.print(fl_wheel_msg.GetTimeSinceLastReceive());
+  Serial.print("\n");
+}
 
 void setup()
 {
   Serial.begin(9600);
   Serial.println("Started");
   can_bus.Initialize(ICAN::BaudRate::kBaud1M);
-  // timer_group.AddTimer(1000, print);
+  timer_group.AddTimer(100, print_time);
 }
 
 void loop()
