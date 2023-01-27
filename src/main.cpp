@@ -9,7 +9,7 @@ TeensyCAN<1> can_bus{};
 
 #ifdef ARDUINO_ARCH_ESP32
 #include "esp_can.h"
-ESPCAN can_bus{GPIO_NUM_32, GPIO_NUM_27};
+ESPCAN can_bus{};
 #endif
 
 
@@ -63,7 +63,7 @@ void setup()
   can_bus.RegisterRXMessage(br_wheel_msg);
   can_bus.RegisterRXMessage(bl_wheel_msg);
 
-  timer_group.AddTimer(10, readBus);
+  timer_group.AddTimer(100, readBus);
 }
 
 void loop()
