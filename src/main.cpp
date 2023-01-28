@@ -63,7 +63,7 @@ void setup()
   can_bus.RegisterRXMessage(br_wheel_msg);
   can_bus.RegisterRXMessage(bl_wheel_msg);
 
-  timer_group.AddTimer(100, readBus);
+  timer_group.AddTimer(10, readBus);
 }
 
 void loop()
