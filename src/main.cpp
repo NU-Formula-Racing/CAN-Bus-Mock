@@ -12,9 +12,7 @@ ESPCAN can_bus{};
 #endif
 
 #define WHEELS
-// #define BRAKE_PRESSURE
 
-constexpr uint8_t potentiometer_pin{34};
 VirtualTimerGroup timer_group;
 
 #ifdef WHEELS
@@ -34,12 +32,23 @@ CANTXMessage<2> bl_wheel_msg{can_bus, 0x402, 6, 100, timer_group, bl_wheel_speed
 CANTXMessage<2> br_wheel_msg{can_bus, 0x403, 6, 100, timer_group, br_wheel_speed, br_brake_temperature};
 #endif
 
-#ifdef BRAKE_PRESSURE
-CANSignal<uint16_t, 0, 16, CANTemplateConvertFloat(1), CANTemplateConvertFloat(0), false, ICANSignal::ByteOrder::kBigEndian> front_brake_pressure;
-CANSignal<uint16_t, 16, 16, CANTemplateConvertFloat(1), CANTemplateConvertFloat(0), false, ICANSignal::ByteOrder::kBigEndian> rear_brake_pressure;
-CANTXMessage<1> front_brake_pressure_msg{can_bus, 0x410, 4, 100, timer_group, front_brake_pressure};
-CANTXMessage<1> back_brake_pressure_msg{can_bus, 0x411, 4, 100, timer_group, rear_brake_pressure};
-#endif
+enum state
+{
+  Shutdown = 0,
+  Precharge = 1,
+  Active = 2,
+  Charging = 3,
+  Fault = 4
+};
+enum fault
+{
+  Faulted = 1,
+  NotFaulted = 0
+};
+CANSignal<state, 48, 8, CANTemplateConvertFloat(1), CANTemplateConvertFloat(0), false> bms_state;
+CANTXMessage<1> bms_status_msg{can_bus, 0x241, 8, 100, timer_group, bms_state};
+CANSignal<state, 0, 1, CANTemplateConvertFloat(1), CANTemplateConvertFloat(0), false> fault_summary;
+CANRXMessage<1> bms_fault_msg{can_bus, 0x250, fault_summary};
 
 void randWrite()
 {
@@ -48,30 +57,30 @@ void randWrite()
   bl_wheel_speed = random(max(1.0, fl_wheel_speed - 1.0) * 1000, min(90.0, fl_wheel_speed + 1.0) * 1000) / 1000.0f;
   br_wheel_speed = random(max(1.0, fl_wheel_speed - 1.0) * 1000, min(90.0, fl_wheel_speed + 1.0) * 1000) / 1000.0f;
 
-  fl_brake_temperature = 90;
-  fr_brake_temperature = 90;
-  bl_brake_temperature = 90;
-  br_brake_temperature = 90;
-
-  // front_brake_pressure = map(analogRead(potentiometer_pin), 0, 4096, 0, 10000);
-  // rear_brake_pressure = map(analogRead(potentiometer_pin), 0, 4096, 0, 10000);
+  if (bms_state == Shutdown)
+  {
+    bms_state = Precharge;
+  }
+  else
+  {
+    bms_state = Shutdown;
+  }
 
   Serial.print("Sent fl_wheel_speed: ");
   Serial.print(fl_wheel_speed);
   Serial.print("\n");
-  Serial.print("Sent fl_brake_temperature: ");
-  Serial.print(fl_brake_temperature);
+  Serial.print("Sent bms_state: ");
+  Serial.print(bms_state);
+  Serial.print("\n");
+  Serial.print("Print fault_summary: ");
+  Serial.print(fault_summary);
+  Serial.print("\n");
   // Serial.print("\n");
   // Serial.print("Sent front_brake_pressure: ");
   // Serial.print(front_brake_pressure);
   // Serial.print("\n");
-  
-  can_bus.Tick();
-}
 
-void enable(){
-  fl_wheel_msg.Enable();
-  fr_wheel_msg.Enable();
+  can_bus.Tick();
 }
 
 void setup()
@@ -79,12 +88,7 @@ void setup()
   Serial.begin(9600);
   Serial.println("Started");
   can_bus.Initialize(ICAN::BaudRate::kBaud1M);
-  fl_wheel_msg.Disable();
-  fr_wheel_msg.Disable();
-  bl_wheel_msg.Disable();
-  br_wheel_msg.Disable();
   timer_group.AddTimer(100, randWrite);
-  timer_group.AddTimer(1000, enable);
 }
 
 void loop()
