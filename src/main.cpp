@@ -28,8 +28,8 @@ CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-
 CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40), false> bl_brake_temperature;
 CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40), false> br_brake_temperature;
 
-CANTXMessage<2> fl_wheel_msg{can_bus, 0x400, 6, 100, timer_group, fl_wheel_speed, fl_brake_temperature};
-CANTXMessage<2> fr_wheel_msg{can_bus, 0x401, 6, 100, timer_group, fr_wheel_speed, fr_brake_temperature};
+CANTXMessage<2> fl_wheel_msg{can_bus, 0xfffff, true, 6, 100, timer_group, fl_wheel_speed, fl_brake_temperature};
+CANTXMessage<2> fr_wheel_msg{can_bus, 0x401, true, 6, 100, timer_group, fr_wheel_speed, fr_brake_temperature};
 CANTXMessage<2> bl_wheel_msg{can_bus, 0x402, 6, 100, timer_group, bl_wheel_speed, bl_brake_temperature};
 CANTXMessage<2> br_wheel_msg{can_bus, 0x403, 6, 100, timer_group, br_wheel_speed, br_brake_temperature};
 #endif
@@ -65,11 +65,12 @@ void randWrite()
   // Serial.print("Sent front_brake_pressure: ");
   // Serial.print(front_brake_pressure);
   // Serial.print("\n");
-  
+
   can_bus.Tick();
 }
 
-void enable(){
+void enable()
+{
   fl_wheel_msg.Enable();
   fr_wheel_msg.Enable();
 }
