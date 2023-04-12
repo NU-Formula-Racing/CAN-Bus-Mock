@@ -80,10 +80,10 @@ void test_callback_never_receive()
 {
   Serial.print("I should never be printed!");
 }
-CANRXMessage<2> fl_wheel_msg{can_bus, 0x400, test_callback, fl_wheel_speed, fl_brake_temperature};
-CANRXMessage<2> fr_wheel_msg{can_bus, 0x401, test_callback, fr_wheel_speed, fr_brake_temperature};
-CANRXMessage<2> bl_wheel_msg{can_bus, 0x402, test_callback_never_receive, bl_wheel_speed, bl_brake_temperature};
-CANRXMessage<2> br_wheel_msg{can_bus, 0x403, test_callback_never_receive, bl_wheel_speed, br_brake_temperature};
+CANRXMessage<2> fl_wheel_msg{can_bus, 0xfffff, test_callback, fl_wheel_speed, fl_brake_temperature};
+CANRXMessage<2> fr_wheel_msg{can_bus, 0x401, fr_wheel_speed, fr_brake_temperature};
+CANRXMessage<2> bl_wheel_msg{can_bus, 0x402, bl_wheel_speed, bl_brake_temperature};
+CANRXMessage<2> br_wheel_msg{can_bus, 0x403, br_wheel_speed, br_brake_temperature};
 
 void print_time()
 {
@@ -109,8 +109,11 @@ void setup()
   Serial.begin(9600);
   Serial.println("Started");
   can_bus.Initialize(ICAN::BaudRate::kBaud1M);
-  // can_bus.RegisterRXMessage(fl_wheel_msg);
-  // timer_group.AddTimer(100, print_time);
+  can_bus.RegisterRXMessage(fl_wheel_msg);
+  can_bus.RegisterRXMessage(fr_wheel_msg);
+  can_bus.RegisterRXMessage(bl_wheel_msg);
+  can_bus.RegisterRXMessage(br_wheel_msg);
+  timer_group.AddTimer(100, print);
 }
 
 void loop()
