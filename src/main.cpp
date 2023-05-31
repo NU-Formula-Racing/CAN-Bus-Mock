@@ -28,10 +28,10 @@ CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-
 CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40), false> bl_brake_temperature;
 CANSignal<float, 16, 16, CANTemplateConvertFloat(0.1), CANTemplateConvertFloat(-40), false> br_brake_temperature;
 
-CANTXMessage<2> fl_wheel_msg{can_bus, 0xfffff, true, 6, 100, timer_group, fl_wheel_speed, fl_brake_temperature};
-CANTXMessage<2> fr_wheel_msg{can_bus, 0x401, true, 6, 100, timer_group, fr_wheel_speed, fr_brake_temperature};
-CANTXMessage<2> bl_wheel_msg{can_bus, 0x402, 6, 100, timer_group, bl_wheel_speed, bl_brake_temperature};
-CANTXMessage<2> br_wheel_msg{can_bus, 0x403, 6, 100, timer_group, br_wheel_speed, br_brake_temperature};
+CANTXMessage<2> fl_wheel_msg{can_bus, 0x400, 6, 10, timer_group, fl_wheel_speed, fl_brake_temperature};
+CANTXMessage<2> fr_wheel_msg{can_bus, 0x401, 6, 10, timer_group, fr_wheel_speed, fr_brake_temperature};
+CANTXMessage<2> bl_wheel_msg{can_bus, 0x402, 6, 10, timer_group, bl_wheel_speed, bl_brake_temperature};
+CANTXMessage<2> br_wheel_msg{can_bus, 0x403, 6, 10, timer_group, br_wheel_speed, br_brake_temperature};
 #endif
 
 #ifdef BRAKE_PRESSURE
@@ -56,11 +56,11 @@ void randWrite()
   // front_brake_pressure = map(analogRead(potentiometer_pin), 0, 4096, 0, 10000);
   // rear_brake_pressure = map(analogRead(potentiometer_pin), 0, 4096, 0, 10000);
 
-  Serial.print("Sent fl_wheel_speed: ");
-  Serial.print(fl_wheel_speed);
-  Serial.print("\n");
-  Serial.print("Sent fl_brake_temperature: ");
-  Serial.print(fl_brake_temperature);
+  // Serial.print("Sent fl_wheel_speed: ");
+  // Serial.print(fl_wheel_speed);
+  // Serial.print("\n");
+  // Serial.print("Sent fl_brake_temperature: ");
+  // Serial.print(fl_brake_temperature);
   // Serial.print("\n");
   // Serial.print("Sent front_brake_pressure: ");
   // Serial.print(front_brake_pressure);
@@ -80,12 +80,12 @@ void setup()
   Serial.begin(9600);
   Serial.println("Started");
   can_bus.Initialize(ICAN::BaudRate::kBaud1M);
-  fl_wheel_msg.Disable();
-  fr_wheel_msg.Disable();
-  bl_wheel_msg.Disable();
-  br_wheel_msg.Disable();
-  timer_group.AddTimer(100, randWrite);
-  timer_group.AddTimer(1000, enable);
+  // fl_wheel_msg.Disable();
+  // fr_wheel_msg.Disable();
+  // bl_wheel_msg.Disable();
+  // br_wheel_msg.Disable();
+  timer_group.AddTimer(10, randWrite);
+  // timer_group.AddTimer(1000, enable);
 }
 
 void loop()
