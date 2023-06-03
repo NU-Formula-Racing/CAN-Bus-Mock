@@ -1,24 +1,22 @@
 #include <Arduino.h>
+#include <HPBus.h>
+#include <LPBus.h>
 
-#if defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41)
-#include "teensy_can.h"
-TeensyCAN<1> can_bus{};
-#endif
-
-#ifdef ARDUINO_ARCH_ESP32
-#include "esp_can.h"
-ESPCAN can_bus{};
-#endif
+HPBus hp_bus{};
+LPBus lp_bus{};
+VirtualTimerGroup timer_group{};
 
 void setup()
 {
-  ;
+    hp_bus.Initialize();
+    lp_bus.Initialize();
+    timer_group.AddTimer(10, []()
+                         { hp_bus.UpdateValues(); });
+    timer_group.AddTimer(10, []()
+                         { lp_bus.UpdateValues(); });
 }
-
-std::chrono::milliseconds next_tick_time = std::chrono::milliseconds(millis());
-std::chrono::milliseconds kTickPeriod{10};
 
 void loop()
 {
-  ;
+    timer_group.Tick(millis());
 }
