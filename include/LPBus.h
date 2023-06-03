@@ -1,3 +1,4 @@
+#include <defines.h>
 #if defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41)
 #include "teensy_can.h"
 #endif
@@ -57,6 +58,7 @@ private:
     MakeUnsignedCANSignal(float, 32, 8, 0.02, 0) High_Side_Driver_2_Signal{};
     MakeUnsignedCANSignal(uint8_t, 0, 8, 1.0, 0) IMD_State_Signal{};
 
+#if defined(Transmit)
     // all tx messages
     CANTXMessage<2> FL_Wheel_TX_Message{can_bus, 0x400, 4, 10, timer_group, FL_Wheel_Speed_Signal, FL_Brake_Temperature_Signal};
     CANTXMessage<2> FR_Wheel_TX_Message{can_bus, 0x401, 4, 10, timer_group, FR_Wheel_Speed_Signal, FR_Brake_Temperature_Signal};
@@ -69,7 +71,9 @@ private:
     CANTXMessage<2> Brake_Pressure_TX_Message{can_bus, 0x410, 4, 10, timer_group, Front_Brake_Pressure_Signal, Back_Brake_Pressure_Signal};
     CANTXMessage<5> PDM_Rails_TX_Message{can_bus, 0x500, 6, 100, timer_group, V5_Rail_Signal, V12_Rail_Signal, Vbat_Rail_Signal, Vbat_Input_Current_Signal, Vbat_Input_Voltage_Signal};
     CANTXMessage<5> PDM_Devices_TX_Message{can_bus, 0x501, 5, 100, timer_group, Air_Cooling_Fan_Signal, Liquid_Cooling_Fan_Signal, Liquid_Cooling_Pump_Signal, High_Side_Driver_1_Signal, High_Side_Driver_2_Signal};
+#endif
 
+#if defined(Receive)
     // all rx messages
     CANRXMessage<2> FL_Wheel_RX_Message{can_bus, 0x400, FL_Wheel_Speed_Signal, FL_Brake_Temperature_Signal};
     CANRXMessage<2> FR_Wheel_RX_Message{can_bus, 0x401, FR_Wheel_Speed_Signal, FR_Brake_Temperature_Signal};
@@ -82,4 +86,5 @@ private:
     CANRXMessage<2> Brake_Pressure_RX_Message{can_bus, 0x410, Front_Brake_Pressure_Signal, Back_Brake_Pressure_Signal};
     CANRXMessage<5> PDM_Rails_RX_Message{can_bus, 0x500, V5_Rail_Signal, V12_Rail_Signal, Vbat_Rail_Signal, Vbat_Input_Current_Signal, Vbat_Input_Voltage_Signal};
     CANRXMessage<5> PDM_Devices_RX_Message{can_bus, 0x501, Air_Cooling_Fan_Signal, Liquid_Cooling_Fan_Signal, Liquid_Cooling_Pump_Signal, High_Side_Driver_1_Signal, High_Side_Driver_2_Signal};
+#endif
 };

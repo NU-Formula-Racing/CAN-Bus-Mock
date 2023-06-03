@@ -1,0 +1,2 @@
+#define Receive
+#define Transmit

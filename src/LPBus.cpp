@@ -17,21 +17,9 @@ void LPBus::Initialize()
     can_bus.RegisterRXMessage(Accelerometer_RX_Message);
     can_bus.RegisterRXMessage(Gyroscope_RX_Message);
     can_bus.RegisterRXMessage(Brake_Pressure_RX_Message);
+    can_bus.RegisterRXMessage(PDM_Rails_RX_Message);
+    can_bus.RegisterRXMessage(PDM_Devices_RX_Message);
 #endif
-}
-
-template <typename Signal_Value>
-Signal_Value Ramp(int16_t start, int16_t finish, int16_t step, Signal_Value signal)
-{
-    if (signal < finish)
-    {
-        signal += step;
-    }
-    else
-    {
-        signal = start;
-    }
-    return signal;
 }
 
 void LPBus::RandomValues()
@@ -71,39 +59,39 @@ void LPBus::RandomValues()
     IMD_State_Signal = random(max(0.0, IMD_State_Signal - 0.1) * 1000, min(4.0, IMD_State_Signal + 0.1) * 1000) / 1000.0f;
 }
 
-// void LPBus::UpdateValues()
-// {
-//     FL_Wheel_Speed_Signal = Ramp(0, 100, 1, FL_Wheel_Speed_Signal);
-//     FL_Brake_Temperature_Signal = Ramp(40, 200, 1, FL_Brake_Temperature_Signal);
-//     FR_Wheel_Speed_Signal = Ramp(0, 100, 1, FR_Wheel_Speed_Signal);
-//     FR_Brake_Temperature_Signal = Ramp(40, 300, 4, FR_Brake_Temperature_Signal);
-//     BL_Wheel_Speed_Signal = Ramp(0, 100, 1, BL_Wheel_Speed_Signal);
-//     BL_Brake_Temperature_Signal = Ramp(40, 400, 3, BL_Brake_Temperature_Signal);
-//     BR_Wheel_Speed_Signal = Ramp(0, 100, 1, BR_Wheel_Speed_Signal);
-//     BR_Brake_Temperature_Signal = Ramp(40, 500, 5, BR_Brake_Temperature_Signal);
-//     Motor_Temperature_Signal = Ramp(-40, 100, 1, Motor_Temperature_Signal);
-//     Coolant_Temperature_Signal = Ramp(-40, 100, 1, Coolant_Temperature_Signal);
-//     Ambient_Temperature_Signal = Ramp(-40, 100, 1, Ambient_Temperature_Signal);
-//     Latitude_Signal = Ramp(420586684, 420686684, 10, Latitude_Signal);
-//     Longitude_Signal = Ramp(-876745819, -875745819, 10, Longitude_Signal);
-//     Accel_X_Signal = Ramp(-2, 2, 0.1, Accel_X_Signal);
-//     Accel_Y_Signal = Ramp(-2, 2, 0.1, Accel_Y_Signal);
-//     Accel_Z_Signal = Ramp(-2, 2, 0.1, Accel_Z_Signal);
-//     Gyro_X_Signal = Ramp(-2, 2, 0.1, Gyro_X_Signal);
-//     Gyro_Y_Signal = Ramp(-2, 2, 0.1, Gyro_Y_Signal);
-//     Gyro_Z_Signal = Ramp(-2, 2, 0.1, Gyro_Z_Signal);
-//     RTC_Signal = Ramp(1685735565, 1685735565, 1, RTC_Signal);
-//     Front_Brake_Pressure_Signal = Ramp(0, 100, 1, Front_Brake_Pressure_Signal);
-//     Back_Brake_Pressure_Signal = Ramp(0, 100, 1, Back_Brake_Pressure_Signal);
-//     V5_Rail_Signal = Ramp(0, 5, 1, V5_Rail_Signal);
-//     V12_Rail_Signal = Ramp(0, 12, 1, V12_Rail_Signal);
-//     Vbat_Rail_Signal = Ramp(0, 5, 1, Vbat_Rail_Signal);
-//     Vbat_Input_Current_Signal = Ramp(0, 300, 1, Vbat_Input_Current_Signal);
-//     Vbat_Input_Voltage_Signal = Ramp(10, 20, 1, Vbat_Input_Voltage_Signal);
-//     Air_Cooling_Fan_Signal = Ramp(0, 100, 1, Air_Cooling_Fan_Signal);
-//     Liquid_Cooling_Fan_Signal = Ramp(0, 100, 1, Liquid_Cooling_Fan_Signal);
-//     Liquid_Cooling_Pump_Signal = Ramp(0, 100, 1, Liquid_Cooling_Pump_Signal);
-//     High_Side_Driver_1_Signal = Ramp(0, 100, 1, High_Side_Driver_1_Signal);
-//     High_Side_Driver_2_Signal = Ramp(0, 100, 1, High_Side_Driver_2_Signal);
-//     IMD_State_Signal = Ramp(0, 4, 1, IMD_State_Signal);
-// }
+void LPBus::UpdateValues()
+{
+    FL_Wheel_Speed_Signal = (FL_Wheel_Speed_Signal < 100) ? FL_Wheel_Speed_Signal + 0.1 : 0;
+    FL_Brake_Temperature_Signal = (FL_Brake_Temperature_Signal < 200) ? FL_Brake_Temperature_Signal + 1 : 40;
+    FR_Wheel_Speed_Signal = (FR_Wheel_Speed_Signal < 100) ? FR_Wheel_Speed_Signal + 0.1 : 0;
+    FR_Brake_Temperature_Signal = (FR_Brake_Temperature_Signal < 300) ? FR_Brake_Temperature_Signal + 4 : 40;
+    BL_Wheel_Speed_Signal = (BL_Wheel_Speed_Signal < 100) ? BL_Wheel_Speed_Signal + 0.1 : 0;
+    BL_Brake_Temperature_Signal = (BL_Brake_Temperature_Signal < 400) ? BL_Brake_Temperature_Signal + 3 : 40;
+    BR_Wheel_Speed_Signal = (BR_Wheel_Speed_Signal < 100) ? BR_Wheel_Speed_Signal + 0.1 : 0;
+    BR_Brake_Temperature_Signal = (BR_Brake_Temperature_Signal < 500) ? BR_Brake_Temperature_Signal + 5 : 40;
+    Motor_Temperature_Signal = (Motor_Temperature_Signal < 100) ? Motor_Temperature_Signal + 1 : -40;
+    Coolant_Temperature_Signal = (Coolant_Temperature_Signal < 100) ? Coolant_Temperature_Signal + 1 : -40;
+    Ambient_Temperature_Signal = (Ambient_Temperature_Signal < 100) ? Ambient_Temperature_Signal + 1 : -40;
+    Latitude_Signal = (Latitude_Signal < 420686684) ? Latitude_Signal + 10 : 420586684;
+    Longitude_Signal = (Longitude_Signal < -875745819) ? Longitude_Signal + 10 : -876745819;
+    Accel_X_Signal = (Accel_X_Signal < 2) ? Accel_X_Signal + 0.1 : -2;
+    Accel_Y_Signal = (Accel_Y_Signal < 2) ? Accel_Y_Signal + 0.1 : -2;
+    Accel_Z_Signal = (Accel_Z_Signal < 2) ? Accel_Z_Signal + 0.1 : -2;
+    Gyro_X_Signal = (Gyro_X_Signal < 2) ? Gyro_X_Signal + 0.1 : -2;
+    Gyro_Y_Signal = (Gyro_Y_Signal < 2) ? Gyro_Y_Signal + 0.1 : -2;
+    Gyro_Z_Signal = (Gyro_Z_Signal < 2) ? Gyro_Z_Signal + 0.1 : -2;
+    RTC_Signal = (RTC_Signal < 1685735565) ? RTC_Signal + 1 : 1685735565;
+    Front_Brake_Pressure_Signal = (Front_Brake_Pressure_Signal < 100) ? Front_Brake_Pressure_Signal + 1 : 0;
+    Back_Brake_Pressure_Signal = (Back_Brake_Pressure_Signal < 100) ? Back_Brake_Pressure_Signal + 1 : 0;
+    V5_Rail_Signal = (V5_Rail_Signal < 5) ? V5_Rail_Signal + 1 : 0;
+    V12_Rail_Signal = (V12_Rail_Signal < 12) ? V12_Rail_Signal + 1 : 0;
+    Vbat_Rail_Signal = (Vbat_Rail_Signal < 5) ? Vbat_Rail_Signal + 1 : 0;
+    Vbat_Input_Current_Signal = (Vbat_Input_Current_Signal < 300) ? Vbat_Input_Current_Signal + 1 : 0;
+    Vbat_Input_Voltage_Signal = (Vbat_Input_Voltage_Signal < 20) ? Vbat_Input_Voltage_Signal + 1 : 10;
+    Air_Cooling_Fan_Signal = (Air_Cooling_Fan_Signal < 100) ? Air_Cooling_Fan_Signal + 1 : 0;
+    Liquid_Cooling_Fan_Signal = (Liquid_Cooling_Fan_Signal < 100) ? Liquid_Cooling_Fan_Signal + 1 : 0;
+    Liquid_Cooling_Pump_Signal = (Liquid_Cooling_Pump_Signal < 100) ? Liquid_Cooling_Pump_Signal + 1 : 0;
+    High_Side_Driver_1_Signal = (High_Side_Driver_1_Signal < 100) ? High_Side_Driver_1_Signal + 1 : 0;
+    High_Side_Driver_2_Signal = (High_Side_Driver_2_Signal < 100) ? High_Side_Driver_2_Signal + 1 : 0;
+    IMD_State_Signal = (IMD_State_Signal < 4) ? IMD_State_Signal + 1 : 0;
+}
