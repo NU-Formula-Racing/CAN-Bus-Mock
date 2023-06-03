@@ -6,9 +6,8 @@ void HPBus::Initialize()
 {
     // initialize bus
     can_bus.Initialize(ICAN::BaudRate::kBaud1M);
-#if defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41)
+#if (defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41)) && defined(Receive)
     // register all messages
-
     can_bus.RegisterRXMessage(Throttle_Values_RX_Message);
     can_bus.RegisterRXMessage(BMS_SOE_RX_Message);
     can_bus.RegisterRXMessage(BMS_Faults_RX_Message);

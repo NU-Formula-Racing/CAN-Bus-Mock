@@ -6,7 +6,7 @@ void LPBus::Initialize()
 {
     // initialize bus
     can_bus.Initialize(ICAN::BaudRate::kBaud1M);
-#if defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41)
+#if (defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41)) && defined(Receive)
     // register all messages
     can_bus.RegisterRXMessage(FL_Wheel_RX_Message);
     can_bus.RegisterRXMessage(FR_Wheel_RX_Message);
@@ -72,14 +72,14 @@ void LPBus::UpdateValues()
     Motor_Temperature_Signal = (Motor_Temperature_Signal < 100) ? Motor_Temperature_Signal + 1 : -40;
     Coolant_Temperature_Signal = (Coolant_Temperature_Signal < 100) ? Coolant_Temperature_Signal + 1 : -40;
     Ambient_Temperature_Signal = (Ambient_Temperature_Signal < 100) ? Ambient_Temperature_Signal + 1 : -40;
-    Latitude_Signal = (Latitude_Signal < 420686684) ? Latitude_Signal + 10 : 420586684;
+    Latitude_Signal = (Latitude_Signal < 420686684) && (Latitude_Signal >= 420586684) ? Latitude_Signal + 10 : 420586684;
     Longitude_Signal = (Longitude_Signal < -875745819) ? Longitude_Signal + 10 : -876745819;
-    Accel_X_Signal = (Accel_X_Signal < 2) ? Accel_X_Signal + 0.1 : -2;
-    Accel_Y_Signal = (Accel_Y_Signal < 2) ? Accel_Y_Signal + 0.1 : -2;
-    Accel_Z_Signal = (Accel_Z_Signal < 2) ? Accel_Z_Signal + 0.1 : -2;
-    Gyro_X_Signal = (Gyro_X_Signal < 2) ? Gyro_X_Signal + 0.1 : -2;
-    Gyro_Y_Signal = (Gyro_Y_Signal < 2) ? Gyro_Y_Signal + 0.1 : -2;
-    Gyro_Z_Signal = (Gyro_Z_Signal < 2) ? Gyro_Z_Signal + 0.1 : -2;
+    Accel_X_Signal = (Accel_X_Signal < 2) ? Accel_X_Signal + 0.01 : -2;
+    Accel_Y_Signal = (Accel_Y_Signal < 2) ? Accel_Y_Signal + 0.01 : -2;
+    Accel_Z_Signal = (Accel_Z_Signal < 2) ? Accel_Z_Signal + 0.01 : -2;
+    Gyro_X_Signal = (Gyro_X_Signal < 2) ? Gyro_X_Signal + 0.01 : -2;
+    Gyro_Y_Signal = (Gyro_Y_Signal < 2) ? Gyro_Y_Signal + 0.01 : -2;
+    Gyro_Z_Signal = (Gyro_Z_Signal < 2) ? Gyro_Z_Signal + 0.01 : -2;
     RTC_Signal = (RTC_Signal < 1685735565) ? RTC_Signal + 1 : 1685735565;
     Front_Brake_Pressure_Signal = (Front_Brake_Pressure_Signal < 100) ? Front_Brake_Pressure_Signal + 1 : 0;
     Back_Brake_Pressure_Signal = (Back_Brake_Pressure_Signal < 100) ? Back_Brake_Pressure_Signal + 1 : 0;

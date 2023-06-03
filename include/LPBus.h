@@ -37,12 +37,12 @@ private:
     MakeUnsignedCANSignal(float, 32, 16, 0.1, -40) Ambient_Temperature_Signal{};
     MakeSignedCANSignal(int32_t, 0, 32, 1.0, 0) Latitude_Signal{};
     MakeSignedCANSignal(int32_t, 32, 32, 1.0, 0) Longitude_Signal{};
-    MakeSignedCANSignal(int16_t, 0, 16, 0.0005, 0) Accel_X_Signal{};
-    MakeSignedCANSignal(int16_t, 16, 16, 0.0005, 0) Accel_Y_Signal{};
-    MakeSignedCANSignal(int16_t, 32, 16, 0.0005, 0) Accel_Z_Signal{};
-    MakeSignedCANSignal(int16_t, 0, 16, 0.0005, 0) Gyro_X_Signal{};
-    MakeSignedCANSignal(int16_t, 16, 16, 0.0005, 0) Gyro_Y_Signal{};
-    MakeSignedCANSignal(int16_t, 32, 16, 0.0005, 0) Gyro_Z_Signal{};
+    MakeSignedCANSignal(float, 0, 16, 0.0005, 0) Accel_X_Signal{};
+    MakeSignedCANSignal(float, 16, 16, 0.0005, 0) Accel_Y_Signal{};
+    MakeSignedCANSignal(float, 32, 16, 0.0005, 0) Accel_Z_Signal{};
+    MakeSignedCANSignal(float, 0, 16, 0.0005, 0) Gyro_X_Signal{};
+    MakeSignedCANSignal(float, 16, 16, 0.0005, 0) Gyro_Y_Signal{};
+    MakeSignedCANSignal(float, 32, 16, 0.0005, 0) Gyro_Z_Signal{};
     MakeUnsignedCANSignal(uint32_t, 0, 32, 1.0, 0) RTC_Signal{};
     MakeUnsignedCANSignal(uint16_t, 0, 16, 1.0, 0) Front_Brake_Pressure_Signal{};
     MakeUnsignedCANSignal(uint16_t, 16, 16, 1.0, 0) Back_Brake_Pressure_Signal{};

@@ -11,7 +11,7 @@ void setup()
 {
     hp_bus.Initialize();
     lp_bus.Initialize();
-#if defined(TX)
+#if defined(Transmit)
     timer_group.AddTimer(10, []()
                          { hp_bus.UpdateValues(); });
     timer_group.AddTimer(10, []()
@@ -26,6 +26,8 @@ void setup()
 void loop()
 {
     timer_group.Tick(millis());
+    hp_bus.timer_group.Tick(millis());
+    lp_bus.timer_group.Tick(millis());
     hp_bus.can_bus.Tick();
     lp_bus.can_bus.Tick();
 }
