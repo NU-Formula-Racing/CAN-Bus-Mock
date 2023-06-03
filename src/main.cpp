@@ -10,10 +10,14 @@ void setup()
 {
     hp_bus.Initialize();
     lp_bus.Initialize();
+    // timer_group.AddTimer(10, []()
+    //                      { hp_bus.UpdateValues(); });
+    // timer_group.AddTimer(10, []()
+    //                      { lp_bus.UpdateValues(); });
     timer_group.AddTimer(10, []()
-                         { hp_bus.UpdateValues(); });
+                         { hp_bus.RandomValues(); });
     timer_group.AddTimer(10, []()
-                         { lp_bus.UpdateValues(); });
+                         { lp_bus.RandomValues(); });
 }
 
 void loop()

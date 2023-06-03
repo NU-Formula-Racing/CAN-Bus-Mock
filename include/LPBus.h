@@ -11,6 +11,7 @@ class LPBus
 public:
     void Initialize();
     void UpdateValues();
+    void RandomValues();
 #if defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41)
     TeensyCAN<1> can_bus{};
 #endif
