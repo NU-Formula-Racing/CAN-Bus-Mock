@@ -80,7 +80,7 @@ void LPBus::UpdateValues()
     Gyro_X_Signal = (Gyro_X_Signal < 2) ? Gyro_X_Signal + 0.01 : -2;
     Gyro_Y_Signal = (Gyro_Y_Signal < 2) ? Gyro_Y_Signal + 0.01 : -2;
     Gyro_Z_Signal = (Gyro_Z_Signal < 2) ? Gyro_Z_Signal + 0.01 : -2;
-    RTC_Signal = (RTC_Signal < 1685735565) ? RTC_Signal + 1 : 1685735565;
+    RTC_Signal = (RTC_Signal < 1685735565) && (RTC_Signal >= 1684735565) ? RTC_Signal + 1 : 1684735565;
     Front_Brake_Pressure_Signal = (Front_Brake_Pressure_Signal < 100) ? Front_Brake_Pressure_Signal + 1 : 0;
     Back_Brake_Pressure_Signal = (Back_Brake_Pressure_Signal < 100) ? Back_Brake_Pressure_Signal + 1 : 0;
     V5_Rail_Signal = (V5_Rail_Signal < 5) ? V5_Rail_Signal + 1 : 0;

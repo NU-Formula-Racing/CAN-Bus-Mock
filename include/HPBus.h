@@ -13,8 +13,9 @@ public:
     void Initialize();
     void UpdateValues();
     void RandomValues();
+    void PrintValues();
 #if defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41)
-    TeensyCAN<1> can_bus{};
+    TeensyCAN<2> can_bus{};
 #endif
 
 #ifdef ARDUINO_ARCH_ESP32
@@ -56,6 +57,8 @@ private:
     CANTXMessage<5> BMS_SOE_TX_Message{can_bus, 0x240, 8, 10, timer_group, Max_Discharge_Current_Signal, Max_Regen_Current_Signal, Battery_Voltage_Signal, Battery_Temperature_Signal, Battery_Current_Signal};
     CANTXMessage<8> BMS_Faults_TX_Message{can_bus, 0x250, 1, 10, timer_group, Fault_Summary_Signal, Undervoltage_Fault_Signal, Overvoltage_Fault_Signal, Undertemperature_Fault_Signal, Overtemperature_Fault_Signal, Overcurrent_Fault_Signal, External_Kill_Fault_Signal, Open_Wire_Fault_Signal};
     CANTXMessage<6> BMS_Status_TX_Message{can_bus, 0x241, 6, 10, timer_group, BMS_State_Signal, Max_Cell_Temp_Signal, Min_Cell_Temp_Signal, Max_Cell_Voltage_Signal, Min_Cell_Voltage_Signal, BMS_SOC_Signal};
+    CANTXMessage<1> BMS_CMD_Message{can_bus, 0x242, 1, 10, timer_group, BMS_Command_Signal};
+    CANTXMessage<1> Throttle_Status_TX_Message{can_bus, 0x301, 1, 10, timer_group, Tractive_System_Status_Signal};
 #endif
 
 #if defined(Receive)

@@ -72,3 +72,22 @@ void HPBus::UpdateValues()
     BMS_Command_Signal = (BMS_Command_Signal < 2) ? BMS_Command_Signal + 1 : 0;
     Tractive_System_Status_Signal = (Tractive_System_Status_Signal < 4) ? Tractive_System_Status_Signal + 1 : 0;
 }
+
+void HPBus::PrintValues()
+{
+    Serial.print("Max_Discharge_Current_Signal: ");
+    Serial.print(Max_Discharge_Current_Signal);
+    Serial.print('\n');
+    Serial.print("Max_Regen_Current_Signal: ");
+    Serial.print(Max_Regen_Current_Signal);
+    Serial.print('\n');
+    Serial.print("Battery_Voltage_Signal: ");
+    Serial.print(Battery_Voltage_Signal);
+    Serial.print('\n');
+    Serial.print("Battery_Temperature_Signal: ");
+    Serial.print(Battery_Temperature_Signal);
+    Serial.print('\n');
+    Serial.print("Battery_Current_Signal: ");
+    Serial.print(Battery_Current_Signal);
+    Serial.print('\n');
+}
