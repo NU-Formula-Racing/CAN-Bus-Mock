@@ -32,9 +32,14 @@ void LPBus::RandomValues()
     BL_Brake_Temperature_Signal = random(max(40.0, BL_Brake_Temperature_Signal - 0.1) * 1000, min(400.0, BL_Brake_Temperature_Signal + 0.1) * 1000) / 1000.0f;
     BR_Wheel_Speed_Signal = random(max(0.0, BR_Wheel_Speed_Signal - 0.1) * 1000, min(90.0, BR_Wheel_Speed_Signal + 0.1) * 1000) / 1000.0f;
     BR_Brake_Temperature_Signal = random(max(40.0, BR_Brake_Temperature_Signal - 0.1) * 1000, min(500.0, BR_Brake_Temperature_Signal + 0.1) * 1000) / 1000.0f;
-    Motor_Temperature_Signal = random(max(-40.0, Motor_Temperature_Signal - 0.1) * 1000, min(100.0, Motor_Temperature_Signal + 0.1) * 1000) / 1000.0f;
-    Coolant_Temperature_Signal = random(max(-40.0, Coolant_Temperature_Signal - 0.1) * 1000, min(100.0, Coolant_Temperature_Signal + 0.1) * 1000) / 1000.0f;
-    Ambient_Temperature_Signal = random(max(-40.0, Ambient_Temperature_Signal - 0.1) * 1000, min(100.0, Ambient_Temperature_Signal + 0.1) * 1000) / 1000.0f;
+    Fault_Summary_Signal = random(0, 1);
+    Undervoltage_Fault_Signal = random(0, 1);
+    Overvoltage_Fault_Signal = random(0, 1);
+    Undertemperature_Fault_Signal = random(0, 1);
+    Overtemperature_Fault_Signal = random(0, 1);
+    Overcurrent_Fault_Signal = random(0, 1);
+    External_Kill_Fault_Signal = random(0, 1);
+    Open_Wire_Fault_Signal = random(0, 1);
     Latitude_Signal = random(max(420586684.0, Latitude_Signal - 0.1) * 1000, min(420686684.0, Latitude_Signal + 0.1) * 1000) / 1000.0f;
     Longitude_Signal = random(max(-876745819.0, Longitude_Signal - 0.1) * 1000, min(-875745819.0, Longitude_Signal + 0.1) * 1000) / 1000.0f;
     Accel_X_Signal = random(max(-2.0, Accel_X_Signal - 0.1) * 1000, min(2.0, Accel_X_Signal + 0.1) * 1000) / 1000.0f;
@@ -69,9 +74,6 @@ void LPBus::UpdateValues()
     BL_Brake_Temperature_Signal = (BL_Brake_Temperature_Signal < 400) ? BL_Brake_Temperature_Signal + 3 : 40;
     BR_Wheel_Speed_Signal = (BR_Wheel_Speed_Signal < 100) ? BR_Wheel_Speed_Signal + 0.1 : 0;
     BR_Brake_Temperature_Signal = (BR_Brake_Temperature_Signal < 500) ? BR_Brake_Temperature_Signal + 5 : 40;
-    Motor_Temperature_Signal = (Motor_Temperature_Signal < 100) ? Motor_Temperature_Signal + 1 : -40;
-    Coolant_Temperature_Signal = (Coolant_Temperature_Signal < 100) ? Coolant_Temperature_Signal + 1 : -40;
-    Ambient_Temperature_Signal = (Ambient_Temperature_Signal < 100) ? Ambient_Temperature_Signal + 1 : -40;
     Latitude_Signal = (Latitude_Signal < 420686684) && (Latitude_Signal >= 420586684) ? Latitude_Signal + 10 : 420586684;
     Longitude_Signal = (Longitude_Signal < -875745819) ? Longitude_Signal + 10 : -876745819;
     Accel_X_Signal = (Accel_X_Signal < 2) ? Accel_X_Signal + 0.01 : -2;
@@ -94,4 +96,12 @@ void LPBus::UpdateValues()
     High_Side_Driver_1_Signal = (High_Side_Driver_1_Signal < 100) ? High_Side_Driver_1_Signal + 1 : 0;
     High_Side_Driver_2_Signal = (High_Side_Driver_2_Signal < 100) ? High_Side_Driver_2_Signal + 1 : 0;
     IMD_State_Signal = (IMD_State_Signal < 4) ? IMD_State_Signal + 1 : 0;
+    Fault_Summary_Signal = (Fault_Summary_Signal < 1) ? Fault_Summary_Signal + 1 : 0;
+    Undervoltage_Fault_Signal = (Undervoltage_Fault_Signal < 1) ? Undervoltage_Fault_Signal + 1 : 0;
+    Overvoltage_Fault_Signal = (Overvoltage_Fault_Signal < 1) ? Overvoltage_Fault_Signal + 1 : 0;
+    Undertemperature_Fault_Signal = (Undertemperature_Fault_Signal < 1) ? Undertemperature_Fault_Signal + 1 : 0;
+    Overtemperature_Fault_Signal = (Overtemperature_Fault_Signal < 1) ? Overtemperature_Fault_Signal + 1 : 0;
+    Overcurrent_Fault_Signal = (Overcurrent_Fault_Signal < 1) ? Overcurrent_Fault_Signal + 1 : 0;
+    External_Kill_Fault_Signal = (External_Kill_Fault_Signal < 1) ? External_Kill_Fault_Signal + 1 : 0;
+    Open_Wire_Fault_Signal = (Open_Wire_Fault_Signal < 1) ? Open_Wire_Fault_Signal + 1 : 0;
 }
